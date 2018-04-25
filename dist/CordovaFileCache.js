@@ -231,6 +231,13 @@ var CordovaFileCache =
 
 	        var downloadUrl = url;
 	        if(self._cacheBuster) downloadUrl += "?"+Date.now();
+		
+		// change path depending on current filesystem
+		if(typeof fs.options.fileSystem !== 'undefined')
+		{
+		   path = fs.options.fileSystem + path;
+		}
+ 
 	        var download = fs.download(downloadUrl,path,{retry:self._retry},includeFileProgressEvents && onSingleDownloadProgress? onSingleDownloadProgress: undefined);
 	        download.then(onDone,onErr);
 	        self._downloading.push(download);
