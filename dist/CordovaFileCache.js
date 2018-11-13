@@ -299,6 +299,12 @@ var CordovaFileCache =
 	 * Helper to transform remote URL to a local path (for cordova-promise-fs)
 	 */
 	FileCache.prototype.toPath = function toPath(url){
+	  
+          // add "/" for windows platform	
+	  if(typeof cordova !== 'undefined' && device.platform === 'windows') {
+	      this.localRoot = this.localRoot + '/';
+	  }
+
 	  if(this._mirrorMode) {
 	    var query = url.indexOf('?');
 	    if(query > -1){
