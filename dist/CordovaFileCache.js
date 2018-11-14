@@ -130,7 +130,14 @@ var CordovaFileCache =
 	  urls.forEach(function(url){
 	    var index = self._added.indexOf(self.toServerURL(url));
 	    if(index >= 0) self._added.splice(index,1);
+		  
 	    var path = self.toPath(url);
+		  
+	    // add "/" to localRoot(data) on windows platform
+      	    if(typeof cordova !== 'undefined' && device.platform === 'windows') {
+                var path = self.toPath(url, true);
+            }
+		  
 	    promises.push(self._fs.remove(path));
 	    delete self._cached[path];
 	  });
@@ -298,7 +305,15 @@ var CordovaFileCache =
 	/**
 	 * Helper to transform remote URL to a local path (for cordova-promise-fs)
 	 */
-	FileCache.prototype.toPath = function toPath(url){
+	FileCache.prototype.toPath = function toPath(url, windowsPlatform = false){
+		
+	  // add "/" to localRoot(data) on windows platform
+	  if(windowsPlatform){
+             this.localRoot = this.localRoot + '/';
+    	  } else {
+	    this.localRoot = 'data';
+    	  }
+		
 	  if(this._mirrorMode) {
 	    var query = url.indexOf('?');
 	    if(query > -1){
