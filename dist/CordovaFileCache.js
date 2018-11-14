@@ -307,12 +307,12 @@ var CordovaFileCache =
 	 */
 	FileCache.prototype.toPath = function toPath(url, windowsPlatform = false){
 		
-	  // add "/" to localRoot(data) on windows platform
-	  if(windowsPlatform){
-             this.localRoot = this.localRoot + '/';
-    	  } else {
+	  // add "/" to localRoot(data) on windows platform and !windows phone
+	  if(windowsPlatform && !navigator.userAgent.match(/Windows Phone/i)){
+	    this.localRoot = this.localRoot + '/';
+	  } else {
 	    this.localRoot = 'data';
-    	  }
+	  }
 		
 	  if(this._mirrorMode) {
 	    var query = url.indexOf('?');
